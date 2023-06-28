@@ -25,21 +25,22 @@ public class Camera {
     public void updateMove(char key, boolean value) {
 
         switch (key) {
-            case 'w':
+            case 'w' -> {
                 position.y += 5;
                 keysPressed[W] = value;
-                break;
-            case 'a':
+            }
+            case 'a' -> {
                 position.x -= 5;
                 keysPressed[A] = value;
-                break;
-            case 's':
+            }
+            case 's' -> {
                 position.y -= 5;
                 keysPressed[S] = value;
-                break;
-            case 'd':
+            }
+            case 'd' -> {
                 position.x += 5;
                 keysPressed[D] = value;
+            }
         }
 
     }
