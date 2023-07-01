@@ -7,13 +7,13 @@ public abstract class WorldObject {
     PVector position;
     PVector rotation;
 
-    public WorldObject(PApplet parent, PVector position, PVector rotation){
+    public WorldObject(PApplet parent, PVector position, PVector rotation) {
         p = parent;
         this.position = position.copy();
         this.rotation = rotation.copy();
     }
 
-    public void render(){
+    public void render() {
         p.pushMatrix();
         p.translate(position.x, position.y, position.z);
         rotate();
@@ -21,7 +21,7 @@ public abstract class WorldObject {
         p.popMatrix();
     }
 
-    void rotate(){
+    void rotate() {
         p.rotateY(rotation.y);
         p.rotateX(rotation.x);
         p.rotateZ(rotation.z);

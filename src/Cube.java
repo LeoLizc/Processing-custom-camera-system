@@ -5,6 +5,7 @@ public class Cube extends WorldObject {
 
     public PVector size;
     int color;
+
     public Cube(PApplet parent, PVector size, PVector position, PVector rotation, int color) {
         super(parent, position, rotation);
         this.size = size;
@@ -12,7 +13,8 @@ public class Cube extends WorldObject {
     }
 
     @Override
-    public void update() {}
+    public void update() {
+    }
 
     @Override
     void drawObject() {
