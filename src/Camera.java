@@ -2,7 +2,7 @@ import processing.core.PApplet;
 import processing.core.PVector;
 
 public class Camera {
-    static final int W=0,A=1,S=2,D=3;
+    static final int W = 0, A = 1, S = 2, D = 3;
     static final float CAMERA_Z_DISTANCE = 311.717f;
     final boolean[] keysPressed = new boolean[4];
 
@@ -11,21 +11,21 @@ public class Camera {
     float velocity = 3;
 
     PVector rotation;
-    float aVelocity = 0.23f*0.02f;
+    float aVelocity = 0.23f * 0.02f;
 
     int xOffset, yOffset;
 
     public Camera(PApplet parent) {
         p = parent;
         position = new PVector();
-        rotation = new PVector(0,0);
+        rotation = new PVector(0, 0);
     }
 
-    public void startMove(char key){
+    public void startMove(char key) {
         updateMove(key, true);
     }
 
-    public void stopMove(char key){
+    public void stopMove(char key) {
         updateMove(key, false);
     }
 
@@ -52,54 +52,66 @@ public class Camera {
 
     }
 
-    public void startRotation(){
+    public void startRotation() {
         xOffset = p.mouseX;
         yOffset = p.mouseY;
     }
 
-    public void rotate(){
-        float xMovement = -(p.mouseX - xOffset)*aVelocity;// positive = right, negative = left
-        //float yMovement = (yOffset - p.mouseY)*aVelocity;// positive = up, negative = down
+    public void rotate() {
+        float xMovement = -(p.mouseX - xOffset) * aVelocity;// positive = right, negative = left
+        float yMovement = (yOffset - p.mouseY) * aVelocity;// positive = up, negative = down
 
         // X movement implies y-axis rotation
         // Positive xMovement implies positive rotation
-        rotation.y = (rotation.y + xMovement < p.PI)? (rotation.y + xMovement > -p.PI)? (rotation.y + xMovement) : p.TWO_PI-(rotation.y + xMovement) : (rotation.y + xMovement)- p.TWO_PI;
+        rotation.y = (rotation.y + xMovement < p.PI) ? (rotation.y + xMovement > -p.PI) ? (rotation.y + xMovement) : p.TWO_PI - (rotation.y + xMovement) : (rotation.y + xMovement) - p.TWO_PI;
 
         // Y movement implies x-axis rotation
         // Positive yMovement implies positive rotation
         // should be between -PI/2 and PI/2
-        // rotation.x = p.constrain(rotation.x + yMovement, -p.HALF_PI, p.HALF_PI);
+        rotation.x = PApplet.constrain(rotation.x + yMovement, -p.HALF_PI, p.HALF_PI);
 
         xOffset = p.mouseX;
         yOffset = p.mouseY;
 
-        System.out.println("x: "+rotation.x+", y: "+rotation.y);
+        System.out.println("x: " + rotation.x + ", y: " + rotation.y);
     }
 
-    public void updateCamera(){
+    public void updateCamera() {
 //        Update position
-        if(keysPressed[W]){
+        if (keysPressed[W]) {
             position.y += velocity;
         }
-        if(keysPressed[A]){
+        if (keysPressed[A]) {
             position.x -= velocity;
         }
-        if(keysPressed[S]){
+        if (keysPressed[S]) {
             position.y -= velocity;
         }
-        if(keysPressed[D]){
+        if (keysPressed[D]) {
             position.x += velocity;
         }
     }
 
-    public void processCamera(){
-        p.translate(p.width/2f,p.height/2f, CAMERA_Z_DISTANCE);
+    public void processCamera() {
+        p.translate(p.width / 2f, p.height / 2f, CAMERA_Z_DISTANCE);
 
-        //process rotation
+        //process Horizontal rotation
         p.rotateY(rotation.y);
-        p.rotateX(rotation.x);
+
+        // Process vertical rotation
+        PVector sight = new PVector(0, 1);
+
+        sight = sight.rotate(rotation.y);
+        sight.z = sight.y;
+        sight.y = 0;
+
+        PVector axis = sight.cross(new PVector(0, 1, 0)).normalize();
+
+        p.rotate(-rotation.x, axis.x, axis.y, axis.z);
+//        p.rotateX(rotation.x);
 
         // process tanslation
         p.translate(-position.x, position.y, position.z);
     }
+
 }

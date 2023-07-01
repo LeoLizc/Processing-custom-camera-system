@@ -4,7 +4,7 @@ import processing.core.PVector;
 import java.util.ArrayList;
 
 public class Main extends PApplet {
-    Camera camera;
+    Camera worldCamera;
 
     ArrayList<WorldObject> objects;
 
@@ -18,7 +18,7 @@ public class Main extends PApplet {
 
     public void setup() {
 //        size(400,400, PConstants.P3D);
-        camera = new Camera(this);
+        worldCamera = new Camera(this);
         objects = new ArrayList<>();
         PVector cSize, position, rotation;
         cSize = new PVector(160, 160, 160);
@@ -57,12 +57,12 @@ public class Main extends PApplet {
     public void draw() {
         update();
         background(240, 240, 240);
-        camera.processCamera();
+        worldCamera.processCamera();
         render();
     }
 
     void update() {
-        camera.updateCamera();
+        worldCamera.updateCamera();
         for (WorldObject element : objects) {
             element.update();
         }
@@ -75,19 +75,19 @@ public class Main extends PApplet {
     }
 
     public void mouseDragged() {
-        camera.rotate();
+        worldCamera.rotate();
     }
 
     public void mousePressed() {
-        camera.startRotation();
+        worldCamera.startRotation();
     }
 
     public void keyPressed() {
-        camera.startMove(key);
+        worldCamera.startMove(key);
     }
 
     public void keyReleased() {
-        camera.stopMove(key);
+        worldCamera.stopMove(key);
     }
 
 }
