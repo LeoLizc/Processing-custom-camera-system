@@ -2,9 +2,9 @@ import processing.core.PApplet;
 import processing.core.PVector;
 
 public class Camera {
-    static final int W = 0, A = 1, S = 2, D = 3;
+    static final int W = 0, A = 1, S = 2, D = 3, SPACE = 4, Q = 5;
     static final float CAMERA_Z_DISTANCE = 311.717f;
-    final boolean[] keysPressed = new boolean[4];
+    final boolean[] keysPressed = new boolean[6];
 
     PApplet p;
     PVector position;
@@ -48,6 +48,14 @@ public class Camera {
                 position.x += 5;
                 keysPressed[D] = value;
             }
+            case ' ' -> {
+                position.y += 5;
+                keysPressed[SPACE] = value;
+            }
+            case 'q' -> {
+                position.y -= 5;
+                keysPressed[Q] = value;
+            }
         }
 
     }
@@ -78,18 +86,36 @@ public class Camera {
 
     public void updateCamera() {
 //        Update position
-        if (keysPressed[W]) {
+
+        PVector fordwareDirection;
+        fordwareDirection = (new PVector(0, 1)).rotate(-rotation.y).mult(velocity);
+
+        if (keysPressed[W]) {//Move Left
+            position.z += fordwareDirection.y;
+            position.x += fordwareDirection.x;
+        }
+        if (keysPressed[S]) {//Move Right
+            position.z -= fordwareDirection.y;
+            position.x -= fordwareDirection.x;
+        }
+
+        fordwareDirection.rotate(-p.HALF_PI);
+        if (keysPressed[A]) {//Move forward
+            position.z -= fordwareDirection.y;
+            position.x -= fordwareDirection.x;
+        }
+        if (keysPressed[D]) {//Move backward
+            position.z += fordwareDirection.y;
+            position.x += fordwareDirection.x;
+        }
+
+        if (keysPressed[SPACE]) {//Move Up
             position.y += velocity;
         }
-        if (keysPressed[A]) {
-            position.x -= velocity;
-        }
-        if (keysPressed[S]) {
+        if (keysPressed[Q]) {//Move Down
             position.y -= velocity;
         }
-        if (keysPressed[D]) {
-            position.x += velocity;
-        }
+
     }
 
     public void processCamera() {
