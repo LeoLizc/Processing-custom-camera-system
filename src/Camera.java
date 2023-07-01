@@ -59,7 +59,7 @@ public class Camera {
 
     public void rotate(){
         float xMovement = -(p.mouseX - xOffset)*aVelocity;// positive = right, negative = left
-        float yMovement = (yOffset - p.mouseY)*aVelocity;// positive = up, negative = down
+        //float yMovement = (yOffset - p.mouseY)*aVelocity;// positive = up, negative = down
 
         // X movement implies y-axis rotation
         // Positive xMovement implies positive rotation
@@ -93,7 +93,7 @@ public class Camera {
     }
 
     public void processCamera(){
-        p.translate(p.width/2,p.height/2, CAMERA_Z_DISTANCE);
+        p.translate(p.width/2f,p.height/2f, CAMERA_Z_DISTANCE);
 
         //process rotation
         p.rotateY(rotation.y);

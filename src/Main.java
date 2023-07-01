@@ -14,7 +14,7 @@ public class Main extends PApplet{
     public void setup(){
 //        size(400,400, PConstants.P3D);
         camera = new Camera(this);
-        objects = new ArrayList<WorldObject>();
+        objects = new ArrayList<>();
         PVector cSize, position, rotation;
         cSize = new PVector(160,160,160);
         position = cSize.copy().set(232, 192, -100-Camera.CAMERA_Z_DISTANCE);
