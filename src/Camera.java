@@ -2,7 +2,6 @@ import processing.core.PApplet;
 import processing.core.PVector;
 
 public class Camera {
-    static final int W = 0, A = 1, S = 2, D = 3, SPACE = 4, Q = 5;
     static final float CAMERA_Z_DISTANCE = 311.717f;
     final boolean[] keysPressed = new boolean[6];
 
@@ -32,30 +31,12 @@ public class Camera {
     public void updateMove(char key, boolean value) {
 
         switch (key) {
-            case 'w' -> {
-                position.y += 5;
-                keysPressed[W] = value;
-            }
-            case 'a' -> {
-                position.x -= 5;
-                keysPressed[A] = value;
-            }
-            case 's' -> {
-                position.y -= 5;
-                keysPressed[S] = value;
-            }
-            case 'd' -> {
-                position.x += 5;
-                keysPressed[D] = value;
-            }
-            case ' ' -> {
-                position.y += 5;
-                keysPressed[SPACE] = value;
-            }
-            case 'q' -> {
-                position.y -= 5;
-                keysPressed[Q] = value;
-            }
+            case 'w' -> keysPressed[CameraKey.W.ordinal()] = value;
+            case 'a' -> keysPressed[CameraKey.A.ordinal()] = value;
+            case 's' -> keysPressed[CameraKey.S.ordinal()] = value;
+            case 'd' -> keysPressed[CameraKey.D.ordinal()] = value;
+            case ' ' -> keysPressed[CameraKey.SPACE.ordinal()] = value;
+            case 'q' -> keysPressed[CameraKey.Q.ordinal()] = value;
         }
 
     }
@@ -90,29 +71,29 @@ public class Camera {
         PVector fordwareDirection;
         fordwareDirection = (new PVector(0, 1)).rotate(-rotation.y).mult(velocity);
 
-        if (keysPressed[W]) {//Move Left
+        if (keysPressed[CameraKey.W.ordinal()]) {//Move Left
             position.z += fordwareDirection.y;
             position.x += fordwareDirection.x;
         }
-        if (keysPressed[S]) {//Move Right
+        if (keysPressed[CameraKey.S.ordinal()]) {//Move Right
             position.z -= fordwareDirection.y;
             position.x -= fordwareDirection.x;
         }
 
         fordwareDirection.rotate(-p.HALF_PI);
-        if (keysPressed[A]) {//Move forward
+        if (keysPressed[CameraKey.A.ordinal()]) {//Move forward
             position.z -= fordwareDirection.y;
             position.x -= fordwareDirection.x;
         }
-        if (keysPressed[D]) {//Move backward
+        if (keysPressed[CameraKey.D.ordinal()]) {//Move backward
             position.z += fordwareDirection.y;
             position.x += fordwareDirection.x;
         }
 
-        if (keysPressed[SPACE]) {//Move Up
+        if (keysPressed[CameraKey.SPACE.ordinal()]) {//Move Up
             position.y += velocity;
         }
-        if (keysPressed[Q]) {//Move Down
+        if (keysPressed[CameraKey.Q.ordinal()]) {//Move Down
             position.y -= velocity;
         }
 
@@ -134,7 +115,6 @@ public class Camera {
         PVector axis = sight.cross(new PVector(0, 1, 0)).normalize();
 
         p.rotate(-rotation.x, axis.x, axis.y, axis.z);
-//        p.rotateX(rotation.x);
 
         // process tanslation
         p.translate(-position.x, position.y, position.z);
