@@ -3,11 +3,11 @@ import processing.core.PVector;
 
 public class Camera {
     static final float CAMERA_Z_DISTANCE = 311.717f;
-    final boolean[] keysPressed = new boolean[6];
+    byte xAxis, yAxis, zAxis;
 
     PApplet p;
     PVector position;
-    float velocity = 3;
+    float velocity = 6;
 
     PVector rotation;
     float aVelocity = 0.23f * 0.02f;
@@ -18,6 +18,7 @@ public class Camera {
         p = parent;
         position = new PVector();
         rotation = new PVector(0, 0);
+        xAxis = yAxis = zAxis = 0;
     }
 
     public void startMove(char key) {
@@ -30,13 +31,15 @@ public class Camera {
 
     public void updateMove(char key, boolean value) {
 
+        byte activate;
+        if(value) activate = 1; else activate=-1;
         switch (key) {
-            case 'w' -> keysPressed[CameraKey.W.ordinal()] = value;
-            case 'a' -> keysPressed[CameraKey.A.ordinal()] = value;
-            case 's' -> keysPressed[CameraKey.S.ordinal()] = value;
-            case 'd' -> keysPressed[CameraKey.D.ordinal()] = value;
-            case ' ' -> keysPressed[CameraKey.SPACE.ordinal()] = value;
-            case 'q' -> keysPressed[CameraKey.Q.ordinal()] = value;
+            case 'w' -> zAxis += activate;
+            case 'a' -> xAxis -= activate;
+            case 's' -> zAxis -= activate;
+            case 'd' -> xAxis += activate;
+            case ' ' -> yAxis += activate;
+            case 'q' -> yAxis -= activate;
         }
 
     }
@@ -66,36 +69,14 @@ public class Camera {
     }
 
     public void updateCamera() {
-//        Update position
 
-        PVector fordwareDirection;
-        fordwareDirection = (new PVector(0, 1)).rotate(-rotation.y).mult(velocity);
+        PVector movementDirection = (new PVector(0,1)).rotate(-rotation.y);
+        movementDirection = movementDirection.copy().mult(zAxis).add(movementDirection.rotate(-p.HALF_PI).mult(xAxis));
+        movementDirection.z = movementDirection.y;
+        movementDirection.y = yAxis;
+        movementDirection.normalize();
 
-        if (keysPressed[CameraKey.W.ordinal()]) {//Move Left
-            position.z += fordwareDirection.y;
-            position.x += fordwareDirection.x;
-        }
-        if (keysPressed[CameraKey.S.ordinal()]) {//Move Right
-            position.z -= fordwareDirection.y;
-            position.x -= fordwareDirection.x;
-        }
-
-        fordwareDirection.rotate(-p.HALF_PI);
-        if (keysPressed[CameraKey.A.ordinal()]) {//Move forward
-            position.z -= fordwareDirection.y;
-            position.x -= fordwareDirection.x;
-        }
-        if (keysPressed[CameraKey.D.ordinal()]) {//Move backward
-            position.z += fordwareDirection.y;
-            position.x += fordwareDirection.x;
-        }
-
-        if (keysPressed[CameraKey.SPACE.ordinal()]) {//Move Up
-            position.y += velocity;
-        }
-        if (keysPressed[CameraKey.Q.ordinal()]) {//Move Down
-            position.y -= velocity;
-        }
+        position.add(movementDirection.mult(velocity));
 
     }
 
