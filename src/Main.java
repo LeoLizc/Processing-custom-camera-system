@@ -19,6 +19,8 @@ public class Main extends PApplet {
     public void setup() {
 //        size(400,400, PConstants.P3D);
         worldCamera = new Camera(this, "../res/sky.jpg");
+//        worldCamera.setDefaultSkyColor(color(255,255,0));
+
         objects = new ArrayList<>();
         PVector cSize, position, rotation;
         cSize = new PVector(160, 160, 160);

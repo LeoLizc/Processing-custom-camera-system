@@ -8,6 +8,7 @@ public class Camera {
     byte xAxis, yAxis, zAxis;
     PImage skyBoxTexture;
     PShape skyBox;
+    private int defaultSkyColor;
 
     PApplet p;
     PVector position;
@@ -30,10 +31,20 @@ public class Camera {
         float farthestLength = cameraZ*15f;
         p.perspective(p.PI/3f, p.width*1f/p.height, cameraZ/10f, farthestLength);
 
-        skyBoxTexture = p.loadImage(skyTexturePath);
         skyBox = p.createShape(p.SPHERE,farthestLength-1);
         skyBox.setStroke(false);
-        skyBox.setTexture(skyBoxTexture);
+        if(skyTexturePath != null) {
+            try {
+                skyBoxTexture = p.loadImage(skyTexturePath);
+                skyBox.setTexture(skyBoxTexture);
+            }catch (Error e){
+                skyBoxTexture=null;
+            }
+        }
+        if(skyBoxTexture == null){
+            defaultSkyColor = p.color(240,240,240);
+            skyBox.setFill(defaultSkyColor);
+        }
     }
 
     public void startMove(char key) {
@@ -80,7 +91,7 @@ public class Camera {
         xOffset = p.mouseX;
         yOffset = p.mouseY;
 
-        System.out.println("x: " + rotation.x + ", y: " + rotation.y);
+//        System.out.println("x: " + rotation.x + ", y: " + rotation.y);
     }
 
     public void updateCamera() {
@@ -118,4 +129,12 @@ public class Camera {
         p.translate(-position.x, position.y, position.z);
     }
 
+    public int getDefaultSkyColor() {
+        return defaultSkyColor;
+    }
+
+    public void setDefaultSkyColor(int defaultSkyColor) {
+        this.defaultSkyColor = defaultSkyColor;
+        if(skyBoxTexture==null) skyBox.setFill(defaultSkyColor);
+    }
 }
