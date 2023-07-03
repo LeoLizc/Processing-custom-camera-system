@@ -24,12 +24,14 @@ public class Camera {
         rotation = new PVector(0, 0);
         xAxis = yAxis = zAxis = 0;
 
-        float cameraZ = ((p.height/2f) / p.tan(p.PI*60f/360f));
+        p.camera(0,0,0,0,0,-1,0,1,0);
+
+        float cameraZ = ((p.height/2f) / PApplet.tan(p.PI*60f/360f));
         float farthestLength = cameraZ*15f;
         p.perspective(p.PI/3f, p.width*1f/p.height, cameraZ/10f, farthestLength);
 
         skyBoxTexture = p.loadImage("../res/sky.jpg");
-        skyBox = p.createShape(p.SPHERE,farthestLength-100);
+        skyBox = p.createShape(p.SPHERE,farthestLength-1);
         skyBox.setStroke(false);
         skyBox.setTexture(skyBoxTexture);
     }
@@ -94,7 +96,7 @@ public class Camera {
     }
 
     public void processCamera() {
-        p.translate(p.width / 2f, p.height / 2f, CAMERA_Z_DISTANCE);
+//        p.translate(p.width / 2f, p.height / 2f, CAMERA_Z_DISTANCE);
 
         //process Horizontal rotation
         p.rotateY(rotation.y);
@@ -108,7 +110,7 @@ public class Camera {
 
         PVector axis = sight.cross(new PVector(0, 1, 0)).normalize();
 
-        p.rotate(-rotation.x, axis.x, axis.y, axis.z);
+        p.rotate(rotation.x, axis.x, axis.y, axis.z);
 
         p.shape(skyBox);
 
