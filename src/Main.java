@@ -56,7 +56,7 @@ public class Main extends PApplet {
 
     public void draw() {
         update();
-        background(240, 240, 240);
+//        background(240, 240, 240);
         worldCamera.processCamera();
         render();
     }

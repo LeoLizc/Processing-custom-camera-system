@@ -1,9 +1,13 @@
 import processing.core.PApplet;
+import processing.core.PImage;
+import processing.core.PShape;
 import processing.core.PVector;
 
 public class Camera {
     static final float CAMERA_Z_DISTANCE = 311.717f;
     byte xAxis, yAxis, zAxis;
+    PImage skyBoxTexture;
+    PShape skyBox;
 
     PApplet p;
     PVector position;
@@ -19,6 +23,15 @@ public class Camera {
         position = new PVector();
         rotation = new PVector(0, 0);
         xAxis = yAxis = zAxis = 0;
+
+        float cameraZ = ((p.height/2f) / p.tan(p.PI*60f/360f));
+        float farthestLength = cameraZ*15f;
+        p.perspective(p.PI/3f, p.width*1f/p.height, cameraZ/10f, farthestLength);
+
+        skyBoxTexture = p.loadImage("../res/sky.jpg");
+        skyBox = p.createShape(p.SPHERE,farthestLength-100);
+        skyBox.setStroke(false);
+        skyBox.setTexture(skyBoxTexture);
     }
 
     public void startMove(char key) {
@@ -96,6 +109,8 @@ public class Camera {
         PVector axis = sight.cross(new PVector(0, 1, 0)).normalize();
 
         p.rotate(-rotation.x, axis.x, axis.y, axis.z);
+
+        p.shape(skyBox);
 
         // process tanslation
         p.translate(-position.x, position.y, position.z);
