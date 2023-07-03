@@ -18,7 +18,7 @@ public class Camera {
 
     int xOffset, yOffset;
 
-    public Camera(PApplet parent) {
+    public Camera(PApplet parent, String skyTexturePath) {
         p = parent;
         position = new PVector();
         rotation = new PVector(0, 0);
@@ -30,7 +30,7 @@ public class Camera {
         float farthestLength = cameraZ*15f;
         p.perspective(p.PI/3f, p.width*1f/p.height, cameraZ/10f, farthestLength);
 
-        skyBoxTexture = p.loadImage("../res/sky.jpg");
+        skyBoxTexture = p.loadImage(skyTexturePath);
         skyBox = p.createShape(p.SPHERE,farthestLength-1);
         skyBox.setStroke(false);
         skyBox.setTexture(skyBoxTexture);
