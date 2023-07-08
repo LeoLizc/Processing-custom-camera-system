@@ -10,7 +10,7 @@ Este proyecto consiste en la implementación de un controlador de cámara 3D en 
 
 1. Clona este repositorio en tu entorno de desarrollo.
    ```shell
-   git clone https://github.com/tu-usuario/nombre-repositorio.git
+   git clone https://github.com/LeoLizc/Processing-custom-camera-system.git
    ```
 2. Abre el proyecto clonado en Processing.
 3. Ejecuta el archivo `Main.java`.
