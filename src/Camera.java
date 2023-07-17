@@ -8,16 +8,13 @@ public class Camera {
     byte xAxis, yAxis, zAxis;
     PImage skyBoxTexture;
     PShape skyBox;
-    private int defaultSkyColor;
-
     PApplet p;
     PVector position;
     float velocity = 6;
-
     PVector rotation;
     float aVelocity = 0.23f * 0.02f;
-
     int xOffset, yOffset;
+    private int defaultSkyColor;
 
     public Camera(PApplet parent, String skyTexturePath) {
         p = parent;
@@ -25,24 +22,24 @@ public class Camera {
         rotation = new PVector(0, 0);
         xAxis = yAxis = zAxis = 0;
 
-        p.camera(0,0,0,0,0,-1,0,1,0);
+        p.camera(0, 0, 0, 0, 0, -1, 0, 1, 0);
 
-        float cameraZ = ((p.height/2f) / PApplet.tan(p.PI*60f/360f));
-        float farthestLength = cameraZ*15f;
-        p.perspective(p.PI/3f, p.width*1f/p.height, cameraZ/10f, farthestLength);
+        float cameraZ = ((p.height / 2f) / PApplet.tan(p.PI * 60f / 360f));
+        float farthestLength = cameraZ * 15f;
+        p.perspective(p.PI / 3f, p.width * 1f / p.height, cameraZ / 10f, farthestLength);
 
-        skyBox = p.createShape(p.SPHERE,farthestLength-1);
+        skyBox = p.createShape(p.SPHERE, farthestLength - 1);
         skyBox.setStroke(false);
-        if(skyTexturePath != null) {
+        if (skyTexturePath != null) {
             try {
                 skyBoxTexture = p.loadImage(skyTexturePath);
                 skyBox.setTexture(skyBoxTexture);
-            }catch (Error e){
-                skyBoxTexture=null;
+            } catch (Error e) {
+                skyBoxTexture = null;
             }
         }
-        if(skyBoxTexture == null){
-            defaultSkyColor = p.color(240,240,240);
+        if (skyBoxTexture == null) {
+            defaultSkyColor = p.color(240, 240, 240);
             skyBox.setFill(defaultSkyColor);
         }
     }
@@ -58,14 +55,21 @@ public class Camera {
     public void updateMove(char key, boolean value) {
 
         byte activate;
-        if(value) activate = 1; else activate=-1;
+        if (value) activate = 1;
+        else activate = -1;
         switch (key) {
             case 'w' -> zAxis += activate;
             case 'a' -> xAxis -= activate;
             case 's' -> zAxis -= activate;
             case 'd' -> xAxis += activate;
             case ' ' -> yAxis += activate;
-            case 'q' -> yAxis -= activate;
+            default -> {
+                if (key == p.CODED) {
+                    if (p.keyCode == p.SHIFT) {
+                        yAxis -= activate;
+                    }
+                }
+            }
         }
 
     }
@@ -96,7 +100,7 @@ public class Camera {
 
     public void updateCamera() {
 
-        PVector movementDirection = (new PVector(0,1)).rotate(-rotation.y);
+        PVector movementDirection = (new PVector(0, 1)).rotate(-rotation.y);
         movementDirection = movementDirection.copy().mult(zAxis).add(movementDirection.rotate(-p.HALF_PI).mult(xAxis));
         movementDirection.z = movementDirection.y;
         movementDirection.y = yAxis;
@@ -135,6 +139,6 @@ public class Camera {
 
     public void setDefaultSkyColor(int defaultSkyColor) {
         this.defaultSkyColor = defaultSkyColor;
-        if(skyBoxTexture==null) skyBox.setFill(defaultSkyColor);
+        if (skyBoxTexture == null) skyBox.setFill(defaultSkyColor);
     }
 }
