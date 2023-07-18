@@ -18,7 +18,8 @@ public class Main extends PApplet {
 
     public void setup() {
 //        size(400,400, PConstants.P3D);
-        worldCamera = new Camera(this, "../res/sky.jpg");
+//        worldCamera = new Camera(this, "../res/sky.jpg");
+        worldCamera = new Camera(this, null);
 //        worldCamera.setDefaultSkyColor(color(255,255,0));
 
         objects = new ArrayList<>();
@@ -54,6 +55,11 @@ public class Main extends PApplet {
                 p.rotateZ(rotation.z);
             }
         });
+
+        //create a plane
+        position = position.set(0, 194+cSize.y/2f, 0);
+        rotation = rotation.set(0, 0, 0);
+        objects.add(new Plane(this, new PVector(100,100,100), position, rotation));
     }
 
     public void draw() {
